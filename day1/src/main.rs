@@ -1,20 +1,18 @@
 pub fn main() {
-    let mut elves = vec![];
-    let mut sum = 0;
-    include_str!("../input.txt").lines().for_each(|calorie| {
-        if !calorie.is_empty() {
-            sum += calorie.parse::<i32>().unwrap();
-        } else {
-            elves.push(sum);
-            sum = 0;
-        }
-    });
+    let mut elves = include_str!("../input.txt")
+        .split("\n\n")
+        .map(|elf| {
+            elf.lines()
+                .map(|calorie| calorie.parse::<i32>().unwrap())
+                .sum::<i32>()
+        })
+        .collect::<Vec<i32>>();
+
     elves.sort_by(|a, b| b.cmp(a));
 
     // Day1a
     println!("1a: {}", elves[0]);
 
     // Day1b
-    elves.truncate(3);
-    println!("1b: {}", elves.into_iter().sum::<i32>())
+    println!("1b: {}", elves.into_iter().take(3).sum::<i32>())
 }
