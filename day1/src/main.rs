@@ -12,8 +12,9 @@ pub fn main() {
     elves.sort_by(|a, b| b.cmp(a));
 
     // Day1a
-    println!("{}", elves[0]);
+    println!("1a: {}", elves[0]);
 
     // Day1b
-    println!("{}", elves[0] + elves[1] + elves[2])
+    elves.truncate(3);
+    println!("1b: {}", elves.into_iter().sum::<i32>())
 }
