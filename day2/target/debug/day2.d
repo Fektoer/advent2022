@@ -1,0 +1,1 @@
+C:\Users\woute\OneDrive\Documents\Code\Advent2022\advent2022\day2\target\debug\day2.exe: C:\Users\woute\OneDrive\Documents\Code\Advent2022\advent2022\day2\input.txt C:\Users\woute\OneDrive\Documents\Code\Advent2022\advent2022\day2\src\main.rs
