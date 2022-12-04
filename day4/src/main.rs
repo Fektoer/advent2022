@@ -1,42 +1,36 @@
 fn main() {
-    let overlap_a = include_str!("../input.txt")
-        .lines()
-        .map(|l| l.split_once(",").unwrap())
-        .fold(0, |acc, (a, b)| {
-            let range_a = a.split_once("-").unwrap();
-            let range_b = b.split_once("-").unwrap();
-            if (range_a.0.parse::<i32>().unwrap() >= range_b.0.parse::<i32>().unwrap()
-                && range_a.1.parse::<i32>().unwrap() <= range_b.1.parse::<i32>().unwrap())
-                || (range_a.0.parse::<i32>().unwrap() <= range_b.0.parse::<i32>().unwrap()
-                    && range_a.1.parse::<i32>().unwrap() >= range_b.1.parse::<i32>().unwrap())
-            {
-                acc + 1
-            } else {
-                acc + 0
-            }
-        });
+    let lines = include_str!("../input.txt");
+
+    let overlap_a = parse_input(lines)
+        .into_iter()
+        .filter(|assignments| {
+            (assignments[0] >= assignments[2] && assignments[1] <= assignments[3])
+                || (assignments[0] <= assignments[2] && assignments[1] >= assignments[3])
+        })
+        .count();
     println!("4a: {}", overlap_a);
 
-    let overlap_a = include_str!("../input.txt")
-        .lines()
-        .map(|l| l.split_once(",").unwrap())
-        .fold(0, |acc, (a, b)| {
-            let range_a = a.split_once("-").unwrap();
-            let range_b = b.split_once("-").unwrap();
+    let overlap_b = parse_input(lines)
+        .into_iter()
+        // char needs to be in both ranges
+        // assume: a1 <= char <= a2 and
+        //         b1 <= char <= b2
+        // assume each range is well formed:
+        // a1 <= a2 and b1 <= b2
+        // then: a1 <= b2 and b1 <= a2
+        .filter(|assignments| assignments[0] <= assignments[3] && assignments[2] <= assignments[1])
+        .count();
+    println!("4b: {}", overlap_b);
+}
 
-            // char needs to be in both ranges
-            // assume: a1 <= char <= a2 and
-            //         b1 <= char <= b2
-            // assume each range is well formed:
-            // a1 <= a2 and b1 <= b2
-            // then: a1 <= b2 and b1 <= a2
-            if range_a.0.parse::<i32>().unwrap() <= range_b.1.parse::<i32>().unwrap()
-                && range_b.0.parse::<i32>().unwrap() <= range_a.1.parse::<i32>().unwrap()
-            {
-                acc + 1
-            } else {
-                acc + 0
-            }
-        });
-    println!("4a: {}", overlap_a);
+fn parse_input(input: &str) -> Vec<Vec<i32>> {
+    // Create a vector containing vectors containing the high/low of both ranges
+    return input
+        .lines()
+        .map(|l| {
+            l.split([',', '-'])
+                .map(|c| c.parse::<i32>().unwrap())
+                .collect::<Vec<i32>>()
+        })
+        .collect::<Vec<Vec<i32>>>();
 }
