@@ -3,7 +3,7 @@ fn main() {
 
     let full_overlap_count = parse_input(lines)
         .into_iter()
-        // range1 needs to be fully encompassed by another range, or vice versa
+        // range1 needs to be fully encompassed by range2, or vice versa
         // thus: a1 <= b1 <= a2 && a1 <= b2 <= a2
         //       but also the other way around:
         //       b1 <= a1 <= b2 && b1 <= a2 <= b2
