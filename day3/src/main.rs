@@ -1,4 +1,14 @@
+fn calc_priority(value: char) -> i32 {
+    if value.is_lowercase() {
+        return value as i32 - 96;
+    } else {
+        return value as i32 - 38;
+    }
+}
+
 fn main() {
+    // 3A
+    //=====================================================
     let sum_priorities = include_str!("../input.txt")
         .lines()
         .map(|l| l.split_at(l.len() / 2))
@@ -16,6 +26,8 @@ fn main() {
 
     println!("2a: {}", sum_priorities);
 
+    // 3B
+    //=====================================================
     let mut three_group = Vec::new();
     let mut groups = Vec::new();
     let rucksacks = include_str!("../input.txt").lines();
@@ -42,12 +54,4 @@ fn main() {
         .sum::<i32>();
 
     println!("2a: {}", sum_priorities_group);
-}
-
-fn calc_priority(value: char) -> i32 {
-    if value.is_lowercase() {
-        return value as i32 - 96;
-    } else {
-        return value as i32 - 38;
-    }
 }
