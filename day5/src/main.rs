@@ -18,8 +18,7 @@ fn initialize_stacks() -> (Vec<Vec<String>>, Vec<&'static str>) {
     let mut crates = binding.drain(0..10).rev().collect::<Vec<&str>>();
 
     // Remove excess lines
-    crates.remove(0);
-    crates.remove(0);
+    crates.drain(0..2);
 
     // Initialize n stacks
     let re1 = Regex::new(r"\[([A-Z])\]").unwrap();
