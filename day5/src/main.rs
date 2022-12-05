@@ -47,7 +47,7 @@ fn move_stacks(stacks: &mut Vec<Vec<String>>, instructions: Vec<&str>, full_stac
         let source = values[1] - 1;
         let target = values[2] - 1;
 
-        // In case of a full stack, move them to a temporary stack first and move again from there
+        // In case of a full stack, move all of them to a temporary stack first and move again from there
         if full_stack {
             let mut temp = Vec::new();
             for _ in 0..amount {
@@ -59,6 +59,8 @@ fn move_stacks(stacks: &mut Vec<Vec<String>>, instructions: Vec<&str>, full_stac
                 let value = temp.pop().unwrap();
                 stacks[target as usize].push(value);
             }
+
+        // Else just immediately move it to the target stack
         } else {
             for _ in 0..amount {
                 let value = stacks[source as usize].pop().unwrap();
