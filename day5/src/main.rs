@@ -22,14 +22,14 @@ fn initialize_stacks() -> (Vec<Vec<String>>, Vec<&'static str>) {
     crates.remove(0);
 
     // Initialize n stacks
-    let re1 = Regex::new(r"([A-Z])").unwrap();
+    let re1 = Regex::new(r"\[([A-Z])\]").unwrap();
     let stack_count = re1.captures_iter(crates[0]).count();
     let mut stacks = vec![Vec::new(); stack_count];
 
     for c in crates {
         for cap in re1.captures_iter(c) {
-            let value = &cap[0];
-            let index = (cap.get(0).unwrap().start() as i32 / 4).abs();
+            let value = cap.get(1).unwrap().as_str();
+            let index = (cap.get(1).unwrap().start() as i32 / 4).abs();
             stacks[index as usize].push(value.to_owned());
         }
     }
