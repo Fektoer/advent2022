@@ -12,6 +12,8 @@ fn main() {
 fn initialize_stacks() -> (Vec<Vec<String>>, Vec<&'static str>) {
     let lines = include_str!("../input.txt").lines();
     let mut binding = lines.collect::<Vec<&str>>();
+
+    // Get the crates, reverse them because the bottom ones are the first one that need to pushed in the stacks
     let mut crates = binding.drain(0..10).rev().collect::<Vec<&str>>();
 
     // Remove excess lines
