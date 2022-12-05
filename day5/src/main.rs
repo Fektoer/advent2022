@@ -1,11 +1,11 @@
 use regex::Regex;
 fn main() {
     let (mut stacks, instructions) = initialize_stacks();
-    move_stacks(&mut stacks, instructions, false);
+    move_stacks(&mut stacks, instructions, true);
     println!("5a: {}", fetch_top_crates(&stacks));
 
     let (mut stacks, instructions) = initialize_stacks();
-    move_stacks(&mut stacks, instructions, true);
+    move_stacks(&mut stacks, instructions, false);
     println!("5b: {}", fetch_top_crates(&stacks))
 }
 
@@ -36,7 +36,7 @@ fn initialize_stacks() -> (Vec<Vec<String>>, Vec<&'static str>) {
     return (stacks, binding);
 }
 
-fn move_stacks(stacks: &mut Vec<Vec<String>>, instructions: Vec<&str>, full_stack: bool) {
+fn move_stacks(stacks: &mut Vec<Vec<String>>, instructions: Vec<&str>, single: bool) {
     let re2 = Regex::new(r"\d+").unwrap();
     for instruction in instructions {
         let values = re2
@@ -48,8 +48,20 @@ fn move_stacks(stacks: &mut Vec<Vec<String>>, instructions: Vec<&str>, full_stac
         let source = values[1] - 1;
         let target = values[2] - 1;
 
-        // In case of a full stack, move all of them to a temporary stack first and move again from there
-        if full_stack {
+        // In case of moving a single crate, just move it directly into the target stack
+        if single {
+            for _ in 0..amount {
+                let value = stacks[source as usize].pop().unwrap();
+                stacks[target as usize].push(value);
+            }
+
+        // In case of multiple crates at once, move them into a temporary stack first
+        // Moving 2 from 1 to 2 becomes
+        // A
+        // B            B                   B                                   A
+        // C            C   A           C   A           C   A   B       C       B
+        // 1    2       1   1'  2       1   1'  2       1   1'  2       1   1'  2
+        } else {
             let mut temp = Vec::new();
             for _ in 0..amount {
                 let value = stacks[source as usize].pop().unwrap();
@@ -58,13 +70,6 @@ fn move_stacks(stacks: &mut Vec<Vec<String>>, instructions: Vec<&str>, full_stac
 
             for _ in 0..amount {
                 let value = temp.pop().unwrap();
-                stacks[target as usize].push(value);
-            }
-
-        // Else just immediately move it to the target stack
-        } else {
-            for _ in 0..amount {
-                let value = stacks[source as usize].pop().unwrap();
                 stacks[target as usize].push(value);
             }
         }
