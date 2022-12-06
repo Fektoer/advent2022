@@ -9,10 +9,7 @@ fn analyze_window(input: &str, size: i32) -> i32 {
     let input_as_vec = input.chars().collect::<Vec<char>>();
     let mut windows = input_as_vec.windows(size as usize).enumerate();
 
-    if let Some((index, _)) = windows.find(|window| {
-        let (_, value) = window;
-        contains_only_unique(value.to_vec())
-    }) {
+    if let Some((index, _)) = windows.find(|(_, value)| contains_only_unique(value.to_vec())) {
         return index as i32 + size;
     } else {
         return 0;
