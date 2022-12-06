@@ -4,23 +4,20 @@ fn main() {
     println!("6b: {}", analyze_window(input, 14));
 }
 
-fn analyze_window(input: &str, size: usize) -> i32 {
+fn analyze_window(input: &str, size: i32) -> i32 {
     let input_as_vec = input.chars().collect::<Vec<char>>();
-    let mut windows = input_as_vec.windows(size);
+    let mut windows = input_as_vec.windows(size as usize).enumerate();
 
-    let mut index = 0;
     loop {
-        index += 1;
-        let value = windows.next();
-        if value == None {
-            break;
+        let (index, value) = windows.next().unwrap();
+        if value.len() == 0 {
+            return index as i32;
         } else {
-            if is_unique(value.unwrap().to_vec()) {
-                break;
+            if is_unique(value.to_vec()) {
+                return index as i32 + (size);
             }
         }
     }
-    return index + (size as i32 - 1);
 }
 
 fn is_unique(vec_of_char: Vec<char>) -> bool {
