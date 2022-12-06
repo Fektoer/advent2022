@@ -76,7 +76,7 @@ fn move_stacks(stacks: &mut Vec<Vec<String>>, instructions: Vec<&str>, single: b
 }
 
 fn fetch_top_crates(stacks: &Vec<Vec<String>>) -> String {
-    let mut result = "".to_owned();
+    let mut result = String::new();
     for stack in stacks {
         if stack.len() > 0 {
             let value = &stack[stack.len() - 1];
