@@ -13,14 +13,14 @@ fn analyze_window(input: &str, size: i32) -> i32 {
         if value.len() == 0 {
             return index as i32;
         } else {
-            if is_unique(value.to_vec()) {
+            if contains_only_unique(value.to_vec()) {
                 return index as i32 + (size);
             }
         }
     }
 }
 
-fn is_unique(vec_of_char: Vec<char>) -> bool {
+fn contains_only_unique(vec_of_char: Vec<char>) -> bool {
     let mut cloned_vec = vec_of_char.clone();
     cloned_vec.sort();
     cloned_vec.dedup();
