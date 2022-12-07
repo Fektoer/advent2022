@@ -1,1 +1,9 @@
-bla
+- create vec of commands
+- drain 1:
+  cd <directory> -> push directory name + <recursion calc filesize> into dict
+ 
+  recursive directory function:
+  ls -> keep draining until next $ command or EOF, sum filesize
+  cd .. -> return filesize
+  
+  https://doc.rust-lang.org/book/ch08-03-hash-maps.html
