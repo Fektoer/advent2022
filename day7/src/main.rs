@@ -42,7 +42,7 @@ fn recursive_search<'a>(
     let re_cd = Regex::new(r"\$ cd ([a-z]+|/)").unwrap();
     match re_cd.captures(line) {
         Some(caps) => {
-            let mut test = caps.get(1).unwrap().as_str().clone();
+            let mut test = caps.get(1).unwrap().as_str();
             dir_name = test;
             recursive_search(commands, directories, dir_name, file_size)
         }
