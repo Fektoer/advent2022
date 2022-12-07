@@ -1,12 +1,28 @@
 - create vec of commands
-- drain 1:
-  cd <directory> -> push directory name + <recursion calc filesize> into dict
- 
+- drain 1 to keep pulling one command from the list
+  
   recursive directory function:
   ls -> keep draining until next $ command or EOF, sum filesize
   dir -> push directory name with initial size to dict. 
       let mut directories = HashMap::new();
       directories.insert(String::from("<dirname>"), 0);
+  cd <directory> -> call self with new directory
   cd .. -> return filesize, update directories.insert(String::from("<dirname>"), <filesize>);
   
   https://doc.rust-lang.org/book/ch08-03-hash-maps.html
+
+
+Sort dictionary by filesize: convert to vec first
+fn main() {
+    let mut count: HashMap<String, u32>= HashMap::new();
+    count.insert(String::from("A"), 5);
+    count.insert(String::from("B"), 2);
+    count.insert(String::from("C"), 11);
+    count.insert(String::from("D"), 10);
+
+    let mut hash_vec: Vec<(&String, &u32)> = count.iter().collect();
+    println!("{:?}", hash_vec);
+    hash_vec.sort_by(|a, b| b.1.cmp(a.1));
+
+    println!("Sorted: {:?}", hash_vec); //Sorted: [("C", 11), ("D", 10), ("A", 5), ("B", 2)]
+}
