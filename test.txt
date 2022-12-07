@@ -26,3 +26,5 @@ fn main() {
 
     println!("Sorted: {:?}", hash_vec); //Sorted: [("C", 11), ("D", 10), ("A", 5), ("B", 2)]
 }
+
+-> hash_vec.filter(size < 10000).count()
