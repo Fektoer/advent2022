@@ -4,6 +4,9 @@
  
   recursive directory function:
   ls -> keep draining until next $ command or EOF, sum filesize
-  cd .. -> return filesize
+  dir -> push directory name with initial size to dict. 
+      let mut directories = HashMap::new();
+      directories.insert(String::from("<dirname>"), 0);
+  cd .. -> return filesize, update directories.insert(String::from("<dirname>"), <filesize>);
   
   https://doc.rust-lang.org/book/ch08-03-hash-maps.html
