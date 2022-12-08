@@ -65,6 +65,8 @@ fn recursive_search<'a>(
             directories.push((dir_name, dir_size));
             return dir_size;
         }
+
+        // Ignore all other commands, they don't impact the outcome
     }
 
     // No more commands, push what we have to storage and exit recursion
