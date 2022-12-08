@@ -11,6 +11,7 @@ fn main() {
     println!("8a {}", calc_visible_trees(tree_grid.clone()));
     println!("8b {}", calc_max_scenic(tree_grid.clone()));
 }
+
 fn calc_max_scenic(tree_grid: Vec<Vec<i32>>) -> i32 {
     let mut scenic_vec: Vec<i32> = Vec::new();
 
