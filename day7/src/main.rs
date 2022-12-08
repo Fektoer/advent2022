@@ -67,7 +67,8 @@ fn search_folder<'a>(
         // Ignore all other commands, they don't impact the outcome
     }
 
-    // No more commands, push what we have to storage and exit recursion
+    // No more commands, push what we have to storage and exit recursion,
+    // returning the size of this directory and all underlying ones
     directories.push((root, dir_size));
     return dir_size;
 }
