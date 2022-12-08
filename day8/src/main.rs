@@ -60,7 +60,7 @@ fn calc_max_scenic(forest: Vec<Vec<i32>>) -> i32 {
 }
 
 fn calc_visible_trees(forest: Vec<Vec<i32>>) -> i32 {
-    let mut visible = 0;
+    let mut sum_visible = 0;
     for row_of_trees in forest.iter().enumerate() {
         for tree in row_of_trees.1.iter().enumerate() {
             // edges
@@ -69,7 +69,7 @@ fn calc_visible_trees(forest: Vec<Vec<i32>>) -> i32 {
                 || row_of_trees.0 == 0
                 || row_of_trees.0 == forest.len() - 1
             {
-                visible += 1;
+                sum_visible += 1;
             } else {
                 let mut horizontal_index = tree.0.clone();
                 let mut left_visible = true;
@@ -101,10 +101,10 @@ fn calc_visible_trees(forest: Vec<Vec<i32>>) -> i32 {
                 }
 
                 if left_visible || right_visible || top_visible || bot_visible {
-                    visible += 1;
+                    sum_visible += 1;
                 }
             }
         }
     }
-    return visible;
+    return sum_visible;
 }
