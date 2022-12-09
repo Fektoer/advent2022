@@ -63,11 +63,7 @@ fn move_knot(
     if head.1 == tail.1 {
         let abs_horizontal = (head.0 - tail.0).abs();
         for _ in 0..abs_horizontal - 1 {
-            if head.0 > tail.0 {
-                tail.0 += 1;
-            } else {
-                tail.0 -= 1;
-            }
+            tail.0 += if head.0 > tail.0 { 1 } else { -1 };
         }
     }
     // vertical movement
@@ -76,11 +72,7 @@ fn move_knot(
         // 0,0 to 0,-2 -> 0,-1
         let abs_vertical = (head.1 - tail.1).abs();
         for _ in 0..abs_vertical - 1 {
-            if head.1 > tail.1 {
-                tail.1 += 1;
-            } else {
-                tail.1 -= 1;
-            }
+            tail.1 += if head.1 > tail.1 { 1 } else { -1 };
         }
     }
     // diagonal
@@ -90,16 +82,8 @@ fn move_knot(
         //             0,0 to -2,-2 -> -1,-1
         //             0,0 to -2,2 -> -1,1
         if (head.1 - tail.1).abs() > 1 && (head.0 - tail.0).abs() > 1 {
-            if head.1 > tail.1 {
-                tail.1 += 1;
-            } else {
-                tail.1 -= 1;
-            }
-            if head.0 > tail.0 {
-                tail.0 += 1;
-            } else {
-                tail.0 -= 1;
-            }
+            tail.1 += if head.1 > tail.1 { 1 } else { -1 };
+            tail.0 += if head.0 > tail.0 { 1 } else { -1 };
 
         // Knight hop: 0,0 to 1,2 -> 1,1
         //             0,0 to 1,-2 -> 1,-1
@@ -107,14 +91,8 @@ fn move_knot(
         //             0,0 to -1,-2 -> -1,-1
         } else if (head.1 - tail.1).abs() > 1 {
             tail.0 = head.0;
-
-            let abs_vertical = (head.1 - tail.1).abs();
-            for _ in 0..abs_vertical - 1 {
-                if head.1 > tail.1 {
-                    tail.1 += 1;
-                } else {
-                    tail.1 -= 1;
-                }
+            for _ in 0..(head.1 - tail.1).abs() - 1 {
+                tail.1 += if head.1 > tail.1 { 1 } else { -1 };
             }
 
         // Knight hop: 0,0 to 2,1 -> 1,1
@@ -123,13 +101,8 @@ fn move_knot(
         //             0,0 to -2,-1 -> -1,-1
         } else if (head.0 - tail.0).abs() > 1 {
             tail.1 = head.1;
-            let abs_horizontal = (head.0 - tail.0).abs();
-            for _ in 0..abs_horizontal - 1 {
-                if head.0 > tail.0 {
-                    tail.0 += 1;
-                } else {
-                    tail.0 -= 1;
-                }
+            for _ in 0..(head.0 - tail.0).abs() - 1 {
+                tail.0 += if head.0 > tail.0 { 1 } else { -1 };
             }
         } else {
             //Don't move
