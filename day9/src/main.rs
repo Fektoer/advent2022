@@ -42,7 +42,7 @@ fn calculate_path(commands: Vec<(&str, i32)>, num_knots: usize) -> i32 {
         }
     }
 
-    // Only store unique positions
+    // We're only interested in unique values
     let mut positions = HashMap::new();
     for position in path_travelled {
         positions.insert(position, true);
@@ -84,23 +84,21 @@ fn move_knot(
             trail.0 += if head.0 > trail.0 { 1 } else { -1 };
 
         // Knight hop: 0,0 to 1,2 -> 1,1
-        //             0,0 to 1,-2 -> 1,-1
-        //             0,0 to -1,2 -> -1,1
-        //             0,0 to -1,-2 -> -1,-1
-        } else if (head.1 - trail.1).abs() > 1 {
-            trail.0 = head.0;
-            for _ in 0..(head.1 - trail.1).abs() - 1 {
-                trail.1 += if head.1 > trail.1 { 1 } else { -1 };
-            }
-
-        // Knight hop: 0,0 to 2,1 -> 1,1
         //             0,0 to 2,-1 -> 1,-1
-        //             0,0 to -2,1 -> -1,1
+        //             0,0 to -1,2 -> -1,1
         //             0,0 to -2,-1 -> -1,-1
-        } else if (head.0 - trail.0).abs() > 1 {
-            trail.1 = head.1;
-            for _ in 0..(head.0 - trail.0).abs() - 1 {
-                trail.0 += if head.0 > trail.0 { 1 } else { -1 };
+        //             etc
+        } else {
+            if (head.1 - trail.1).abs() > 1 {
+                trail.0 = head.0;
+                for _ in 0..(head.1 - trail.1).abs() - 1 {
+                    trail.1 += if head.1 > trail.1 { 1 } else { -1 };
+                }
+            } else if (head.0 - trail.0).abs() > 1 {
+                trail.1 = head.1;
+                for _ in 0..(head.0 - trail.0).abs() - 1 {
+                    trail.0 += if head.0 > trail.0 { 1 } else { -1 };
+                }
             }
         }
     }
