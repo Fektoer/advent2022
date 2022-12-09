@@ -12,9 +12,9 @@ fn main() {
     println!("9b {}", calculate_path(commands.clone(), 10));
 }
 
-fn calculate_path(commands: Vec<(&str, i32)>, num_knots: i32) -> i32 {
+fn calculate_path(commands: Vec<(&str, i32)>, num_knots: usize) -> i32 {
     let mut path_travelled: Vec<(i32, i32)> = Vec::new();
-    let mut knots: Vec<(i32, i32)> = vec![(0, 0); num_knots as usize];
+    let mut knots: Vec<(i32, i32)> = vec![(0, 0); num_knots];
 
     for command in commands {
         // Split each movement command into steps of 1
