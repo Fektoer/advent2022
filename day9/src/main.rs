@@ -104,8 +104,6 @@ fn move_knot(
             for _ in 0..(head.0 - tail.0).abs() - 1 {
                 tail.0 += if head.0 > tail.0 { 1 } else { -1 };
             }
-        } else {
-            //Don't move
         }
     }
     if store_path_travelled {
