@@ -53,26 +53,24 @@ fn calculate_path(commands: Vec<(&str, i32)>, num_knots: usize) -> i32 {
 
 fn move_knot(
     head: &(i32, i32),
-    tail: &mut (i32, i32),
+    trail: &mut (i32, i32),
     store_path_travelled: bool,
     path_travelled: &mut Vec<(i32, i32)>,
 ) {
     // horizontal movement
     // 0,0 to 2,0 -> 1,0
     // 0,0 to -2,0 -> -1,0
-    if head.1 == tail.1 {
-        let abs_horizontal = (head.0 - tail.0).abs();
-        for _ in 0..abs_horizontal - 1 {
-            tail.0 += if head.0 > tail.0 { 1 } else { -1 };
+    if head.1 == trail.1 {
+        for _ in 0..(head.0 - trail.0).abs() - 1 {
+            trail.0 += if head.0 > trail.0 { 1 } else { -1 };
         }
     }
     // vertical movement
-    else if head.0 == tail.0 {
+    else if head.0 == trail.0 {
         // 0,0 to 0,2 -> 0,1
         // 0,0 to 0,-2 -> 0,-1
-        let abs_vertical = (head.1 - tail.1).abs();
-        for _ in 0..abs_vertical - 1 {
-            tail.1 += if head.1 > tail.1 { 1 } else { -1 };
+        for _ in 0..(head.1 - trail.1).abs() - 1 {
+            trail.1 += if head.1 > trail.1 { 1 } else { -1 };
         }
     }
     // diagonal
@@ -81,32 +79,32 @@ fn move_knot(
         //             0,0 to 2,-2 -> 1,-1
         //             0,0 to -2,-2 -> -1,-1
         //             0,0 to -2,2 -> -1,1
-        if (head.1 - tail.1).abs() > 1 && (head.0 - tail.0).abs() > 1 {
-            tail.1 += if head.1 > tail.1 { 1 } else { -1 };
-            tail.0 += if head.0 > tail.0 { 1 } else { -1 };
+        if (head.1 - trail.1).abs() > 1 && (head.0 - trail.0).abs() > 1 {
+            trail.1 += if head.1 > trail.1 { 1 } else { -1 };
+            trail.0 += if head.0 > trail.0 { 1 } else { -1 };
 
         // Knight hop: 0,0 to 1,2 -> 1,1
         //             0,0 to 1,-2 -> 1,-1
         //             0,0 to -1,2 -> -1,1
         //             0,0 to -1,-2 -> -1,-1
-        } else if (head.1 - tail.1).abs() > 1 {
-            tail.0 = head.0;
-            for _ in 0..(head.1 - tail.1).abs() - 1 {
-                tail.1 += if head.1 > tail.1 { 1 } else { -1 };
+        } else if (head.1 - trail.1).abs() > 1 {
+            trail.0 = head.0;
+            for _ in 0..(head.1 - trail.1).abs() - 1 {
+                trail.1 += if head.1 > trail.1 { 1 } else { -1 };
             }
 
         // Knight hop: 0,0 to 2,1 -> 1,1
         //             0,0 to 2,-1 -> 1,-1
         //             0,0 to -2,1 -> -1,1
         //             0,0 to -2,-1 -> -1,-1
-        } else if (head.0 - tail.0).abs() > 1 {
-            tail.1 = head.1;
-            for _ in 0..(head.0 - tail.0).abs() - 1 {
-                tail.0 += if head.0 > tail.0 { 1 } else { -1 };
+        } else if (head.0 - trail.0).abs() > 1 {
+            trail.1 = head.1;
+            for _ in 0..(head.0 - trail.0).abs() - 1 {
+                trail.0 += if head.0 > trail.0 { 1 } else { -1 };
             }
         }
     }
     if store_path_travelled {
-        path_travelled.push(*tail);
+        path_travelled.push(*trail);
     }
 }
