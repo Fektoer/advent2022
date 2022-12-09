@@ -19,6 +19,7 @@ fn calculate_path(commands: Vec<(&str, i32)>, num_knots: usize) -> i32 {
     for command in commands {
         // Split each movement command into steps of 1
         for _ in 0..command.1 {
+            // Move the head
             match command.0 {
                 "R" => knots[0].0 += 1,
                 "U" => knots[0].1 += 1,
