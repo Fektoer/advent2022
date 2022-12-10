@@ -38,7 +38,7 @@ fn main() {
     );
 
     print!("10b");
-    for row in 0..=5 {
+    for row in 0..6 {
         println!("");
         for index in (row * 40) + 1..(row + 1) * 40 {
             let position = calc_register(cycles.clone(), index);
