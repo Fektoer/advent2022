@@ -16,7 +16,7 @@ impl Monkey {
         self.items.len() > 0
     }
 
-    fn inspect(&mut self, lcm: i64) {
+    fn inspect_shit(&mut self, lcm: i64) {
         let item = self.items.first().unwrap();
         let modifier = if self.inspect_modifier == 0 {
             item
@@ -84,9 +84,9 @@ fn calculate_monkey_business(rounds: i32, use_lcm: bool) -> i64 {
             let monkey = &mut monkeys[index];
             while monkey.has_items() {
                 if use_lcm {
-                    monkey.inspect(lcm);
+                    monkey.inspect_shit(lcm);
                 } else {
-                    monkey.inspect(0);
+                    monkey.inspect_shit(0);
                     monkey.is_bored();
                 }
                 shit.push(monkey.throw_shit());
