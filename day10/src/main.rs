@@ -7,7 +7,7 @@ fn main() {
     include_str!("../input.txt")
         .lines()
         .collect::<Vec<&str>>()
-        .into_iter()
+        .iter()
         .enumerate()
         .for_each(|command| {
             let cycle = command.0 as i32 + 1;
@@ -62,9 +62,8 @@ fn main() {
 fn calc_register(cycles: Vec<(i32, i32)>, cycle: i32) -> i32 {
     return &cycles[0..(cycle as usize) - 1]
         .into_iter()
+        .cloned()
         .map(|c| c.1)
-        .collect::<Vec<i32>>()
-        .into_iter()
         .sum::<i32>()
         + 1;
 }
