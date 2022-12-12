@@ -94,7 +94,6 @@ fn calculate_monkey_business(rounds: i32, use_lcm: bool) -> i64 {
 
 fn parse_monkeys() -> Vec<Monkey> {
     let mut monkeys: Vec<Monkey> = Vec::new();
-
     include_str!("../input.txt")
         .split("\n\n")
         .for_each(|monkey_batch| {
@@ -106,13 +105,13 @@ fn parse_monkeys() -> Vec<Monkey> {
                 items.push(cap.as_str().parse::<i64>().unwrap());
             });
 
-            let mut operator = '\0';
-            let mut modifier: i64 = 0;
+            let mut inspect_operator = '\0';
+            let mut inspect_modifier: i64 = 0;
             let re_operator = Regex::new(r"(\+|\*)\s(\d+|old)").unwrap();
             match re_operator.captures(monkey_lines[2]) {
                 Some(caps) => {
-                    operator = caps.get(1).unwrap().as_str().parse::<char>().unwrap();
-                    modifier = if caps.get(2).unwrap().as_str() == "old" {
+                    inspect_operator = caps.get(1).unwrap().as_str().parse::<char>().unwrap();
+                    inspect_modifier = if caps.get(2).unwrap().as_str() == "old" {
                         0
                     } else {
                         caps.get(2).unwrap().as_str().parse::<i64>().unwrap()
@@ -149,12 +148,12 @@ fn parse_monkeys() -> Vec<Monkey> {
             }
 
             let monkey = Monkey {
-                items: items,
-                inspect_operator: operator,
-                inspect_modifier: modifier,
-                test_value: test_value,
-                true_monkey: true_monkey,
-                false_monkey: false_monkey,
+                items,
+                inspect_operator,
+                inspect_modifier,
+                test_value,
+                true_monkey,
+                false_monkey,
                 num_inspect: 0,
             };
 
