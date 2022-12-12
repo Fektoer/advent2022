@@ -1,4 +1,5 @@
 use regex::Regex;
+use std::time::Instant;
 
 struct Monkey {
     items: Vec<i64>,
@@ -56,8 +57,17 @@ impl Monkey {
 }
 
 fn main() {
-    println!("11a {:?}", calculate_monkey_business(20, false));
-    println!("11b {:?}", calculate_monkey_business(10000, true));
+    let start = Instant::now();
+    println!(
+        "11a {:?} in {:?}",
+        calculate_monkey_business(20, false),
+        start.elapsed()
+    );
+    println!(
+        "11b {:?} in {:?}",
+        calculate_monkey_business(10000, true),
+        start.elapsed()
+    );
 }
 
 fn calculate_monkey_business(rounds: i32, use_lcm: bool) -> i64 {
