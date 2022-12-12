@@ -1,6 +1,8 @@
 use regex::Regex;
+use std::time::Instant;
 
 fn main() {
+    let start = Instant::now();
     let mut cycles: Vec<(i32, i32)> = Vec::new();
     include_str!("../input.txt")
         .lines()
@@ -28,16 +30,16 @@ fn main() {
         });
 
     println!(
-        "10a {:?}",
+        "10a {:?} in {:?}",
         [20, 60, 100, 140, 180, 220]
             .into_iter()
             .fold(0, |mut sum, curr| {
                 sum += calc_register(cycles.clone(), curr) * curr;
                 sum
-            })
+            }),
+        start.elapsed()
     );
 
-    print!("10b");
     for row in 0..6 {
         println!("");
         for index in (row * 40) + 1..(row + 1) * 40 {
@@ -53,6 +55,8 @@ fn main() {
             );
         }
     }
+    println!("");
+    println!("10b in {:?}", start.elapsed());
 }
 
 fn calc_register(cycles: Vec<(i32, i32)>, cycle: i32) -> i32 {

@@ -1,4 +1,7 @@
+use std::time::Instant;
+
 fn main() {
+    let start = Instant::now();
     let forest = include_str!("../input.txt")
         .lines()
         .map(|line| {
@@ -8,8 +11,16 @@ fn main() {
         })
         .collect::<Vec<Vec<i32>>>();
 
-    println!("8a {}", calc_visible_trees(forest.clone()));
-    println!("8b {}", calc_max_scenic(forest.clone()));
+    println!(
+        "8a {} in {:?}",
+        calc_visible_trees(forest.clone()),
+        start.elapsed()
+    );
+    println!(
+        "8b {} in {:?}",
+        calc_max_scenic(forest.clone()),
+        start.elapsed()
+    );
 }
 
 fn calc_max_scenic(forest: Vec<Vec<i32>>) -> i32 {

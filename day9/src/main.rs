@@ -1,5 +1,7 @@
 use std::collections::HashMap;
+use std::time::Instant;
 fn main() {
+    let start = Instant::now();
     let commands = include_str!("../input.txt")
         .lines()
         .map(|l| {
@@ -8,8 +10,16 @@ fn main() {
         })
         .collect::<Vec<(&str, i32)>>();
 
-    println!("9a {}", calculate_path(commands.clone(), 2));
-    println!("9b {}", calculate_path(commands.clone(), 10));
+    println!(
+        "9a {} in {:?}",
+        calculate_path(commands.clone(), 2),
+        start.elapsed()
+    );
+    println!(
+        "9b {} in {:?}",
+        calculate_path(commands.clone(), 10),
+        start.elapsed()
+    );
 }
 
 fn calculate_path(commands: Vec<(&str, i32)>, num_knots: usize) -> i32 {
