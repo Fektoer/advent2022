@@ -1,29 +1,32 @@
-use pathfinding::prelude::dijkstra;
-
-#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-struct Pos(i32, i32);
-
-impl Pos {
-    fn successors(&self) -> Vec<(Pos, usize)> {
-        let &Pos(x, y) = self;
-        vec![
-            Pos(x + 1, y + 2),
-            Pos(x + 1, y - 2),
-            Pos(x - 1, y + 2),
-            Pos(x - 1, y - 2),
-            Pos(x + 2, y + 1),
-            Pos(x + 2, y - 1),
-            Pos(x - 2, y + 1),
-            Pos(x - 2, y - 1),
-        ]
-        .into_iter()
-        .map(|p| (p, 1))
-        .collect()
-    }
-}
+use std::collections::HashMap;
+#[derive(Clone, Debug, Eq, Hash, PartialEq, PartialOrd)]
+struct Point(usize, usize);
 
 fn main() {
-    static GOAL: Pos = Pos(4, 6);
-    let result = dijkstra(&Pos(1, 1), |p| p.successors(), |p| *p == GOAL).unwrap();
-    println!("{:?}", result);
+    let mut values = HashMap::new();
+    let mut visited = HashMap::new();
+    let mut distance = HashMap::new();
+    let mut start = Point(0, 0);
+    let mut end = Point(0, 0);
+    include_str!("../input.txt")
+        .split("\n")
+        .enumerate()
+        .for_each(|line| {
+            line.1.chars().enumerate().for_each(|char| {
+                match char.1 {
+                    'S' => start = Point(line.0, char.0),
+                    'E' => end = Point(line.0, char.0),
+                    _ => {}
+                }
+                values.insert(Point(line.0, char.0), char.1);
+            })
+        });
+
+    for value in values {
+        distance.insert(value, i32::MAX);
+        visited.insert(value, false);
+    }
+
+    distance.insert(start, 0);
+    println!("done");
 }
