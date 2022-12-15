@@ -33,7 +33,13 @@ fn main() {
             let mut left = parse(&mut pair.1[0].chars().collect::<VecDeque<char>>());
             let mut right = parse(&mut pair.1[1].chars().collect::<VecDeque<char>>());
 
-            let value = if compare(&mut left, &mut right) {
+            println!("{:?}", pair.0 + 1);
+            println!("{:?}", pair.1[0]);
+            println!("{:?}", pair.1[1]);
+
+            let (valid, _) = compare(&mut left, &mut right);
+            let value = if valid {
+                println!("valid {:?}", pair.0 + 1);
                 pair.0 + 1
             } else {
                 0
@@ -43,18 +49,19 @@ fn main() {
     println!("{:?}", sum);
 }
 
-fn compare(left: &mut VecDeque<Packet>, right: &mut VecDeque<Packet>) -> bool {
+fn compare(left: &mut VecDeque<Packet>, right: &mut VecDeque<Packet>) -> (bool, bool) {
     let mut result_found: bool = false;
     let mut valid: bool = true;
 
     if left.len() == 0 && right.len() != 0 {
         valid = true;
+        result_found = true;
     } else {
         while left.len() != 00 && !result_found {
             if let Some(left_packet) = left.pop_front() {
                 if right.len() == 0 {
                     valid = false;
-                    return valid;
+                    return (valid, true);
                 }
                 let right_packet = right.pop_front().unwrap();
 
@@ -66,24 +73,24 @@ fn compare(left: &mut VecDeque<Packet>, right: &mut VecDeque<Packet>) -> bool {
                         }
                     }
                     (Packet::Packets(_), Packet::Packets(_)) => {
-                        valid =
+                        (valid, result_found) =
                             compare(&mut left_packet.get_array(), &mut right_packet.get_array());
                     }
                     (Packet::Num(_), Packet::Packets(_)) => {
                         let mut vec: VecDeque<Packet> = VecDeque::new();
                         vec.push_back(left_packet.clone());
-                        valid = compare(&mut vec, &mut right_packet.get_array());
+                        (valid, result_found) = compare(&mut vec, &mut right_packet.get_array());
                     }
                     (Packet::Packets(_), Packet::Num(_)) => {
                         let mut vec: VecDeque<Packet> = VecDeque::new();
                         vec.push_back(right_packet.clone());
-                        valid = compare(&mut left_packet.get_array(), &mut vec);
+                        (valid, result_found) = compare(&mut left_packet.get_array(), &mut vec);
                     }
                 }
             }
         }
     }
-    return valid;
+    return (valid, result_found);
 }
 
 fn parse(input: &mut VecDeque<char>) -> VecDeque<Packet> {
