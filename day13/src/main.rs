@@ -1,4 +1,5 @@
 use std::collections::VecDeque;
+use std::time::Instant;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 enum Packet {
@@ -25,7 +26,7 @@ impl Packet {
 }
 
 fn main() {
-    let sum = include_str!("../sample2.txt")
+    let sum = include_str!("../input.txt")
         .split("\n\n")
         .map(|pair| pair.lines().collect::<Vec<&str>>())
         .enumerate()
@@ -33,31 +34,25 @@ fn main() {
             let mut left = parse(&mut pair.1[0].chars().collect::<VecDeque<char>>());
             let mut right = parse(&mut pair.1[1].chars().collect::<VecDeque<char>>());
 
-            println!("{:?}", pair.0 + 1);
-            println!("{:?}", pair.1[0]);
-            println!("{:?}", pair.1[1]);
-
             let (valid, _) = compare(&mut left, &mut right);
-            let value = if valid {
-                println!("valid {:?}", pair.0 + 1);
-                pair.0 + 1
-            } else {
-                0
-            };
+            let value = if valid { pair.0 + 1 } else { 0 };
             acc + value
         });
-    println!("{:?}", sum);
+    println!("13a {:?}", sum);
 }
 
 fn compare(left: &mut VecDeque<Packet>, right: &mut VecDeque<Packet>) -> (bool, bool) {
     let mut result_found: bool = false;
     let mut valid: bool = true;
 
-    if left.len() == 0 && right.len() != 0 {
-        valid = true;
-        result_found = true;
-    } else {
-        while left.len() != 00 && !result_found {
+    while !result_found {
+        if left.len() == 0 {
+            if right.len() == 0 {
+                return (valid, result_found);
+            } else {
+                return (true, true);
+            }
+        } else {
             if let Some(left_packet) = left.pop_front() {
                 if right.len() == 0 {
                     valid = false;
