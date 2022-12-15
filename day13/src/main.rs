@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::collections::VecDeque;
 use std::time::Instant;
 
@@ -25,8 +26,31 @@ impl Packet {
     }
 }
 
+#[derive(Debug, Eq, PartialEq, PartialOrd, Clone, Copy)]
+struct PacketString<'a>(&'a str);
+
+impl Ord for PacketString<'_> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        let mut left = parse(&mut self.0.chars().collect::<VecDeque<char>>());
+        let mut right = parse(&mut other.0.chars().collect::<VecDeque<char>>());
+        let (valid, _) = compare(&mut left, &mut right);
+        let ordering = if valid {
+            Ordering::Less
+        } else {
+            Ordering::Greater
+        };
+        ordering
+    }
+}
+
 fn main() {
-    let sum = include_str!("../input.txt")
+    let start = Instant::now();
+    println!("13a {:?} in {:?}", part1(), start.elapsed());
+    println!("13b {:?} in {:?}", part2(), start.elapsed());
+}
+
+fn part1() -> usize {
+    return include_str!("../input.txt")
         .split("\n\n")
         .map(|pair| pair.lines().collect::<Vec<&str>>())
         .enumerate()
@@ -38,7 +62,27 @@ fn main() {
             let value = if valid { pair.0 + 1 } else { 0 };
             acc + value
         });
-    println!("13a {:?}", sum);
+}
+
+fn part2() -> usize {
+    let divider2 = PacketString("[[2]]");
+    let divider6 = PacketString("[[6]]");
+
+    let binding = include_str!("../input.txt").replace("\n\n", "\n");
+    let mut packets = binding
+        .split("\n")
+        .map(|s| PacketString(s))
+        .collect::<Vec<PacketString>>();
+
+    packets.push(divider2);
+    packets.push(divider6);
+
+    packets.sort_by(|a, b| a.cmp(b));
+
+    let index2 = packets.iter().position(|&r| r == divider2).unwrap();
+    let index6 = packets.iter().position(|&r| r == divider6).unwrap();
+
+    return (index2 + 1) * (index6 + 1);
 }
 
 fn compare(left: &mut VecDeque<Packet>, right: &mut VecDeque<Packet>) -> (bool, bool) {
