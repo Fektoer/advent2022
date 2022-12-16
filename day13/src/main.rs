@@ -1,29 +1,12 @@
 use std::cmp::Ordering;
 use std::collections::VecDeque;
+use std::iter::FromIterator;
 use std::time::Instant;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 enum Packet {
     Num(u32),
     Packets(VecDeque<Packet>),
-}
-
-impl Packet {
-    fn get_number(&self) -> u32 {
-        if let Packet::Num(c) = self {
-            *c
-        } else {
-            panic!("Not a number")
-        }
-    }
-
-    fn get_array(&self) -> VecDeque<Packet> {
-        if let Packet::Packets(c) = self {
-            c.clone()
-        } else {
-            panic!("Not an array")
-        }
-    }
 }
 
 #[derive(Debug, Eq, PartialEq, PartialOrd, Clone, Copy)]
@@ -65,22 +48,19 @@ fn part1() -> usize {
 }
 
 fn part2() -> usize {
-    let divider2 = PacketString("[[2]]");
-    let divider6 = PacketString("[[6]]");
-
     let binding = include_str!("../input.txt").replace("\n\n", "\n");
     let mut packets = binding
         .split("\n")
         .map(|s| PacketString(s))
         .collect::<Vec<PacketString>>();
 
-    packets.push(divider2);
-    packets.push(divider6);
-
+    let packet2 = PacketString("[[2]]");
+    let packet6 = PacketString("[[6]]");
+    packets.extend_from_slice(&[packet2, packet6]);
     packets.sort_by(|a, b| a.cmp(b));
 
-    let index2 = packets.iter().position(|&r| r == divider2).unwrap();
-    let index6 = packets.iter().position(|&r| r == divider6).unwrap();
+    let index2 = packets.iter().position(|&r| r == packet2).unwrap();
+    let index6 = packets.iter().position(|&r| r == packet6).unwrap();
 
     return (index2 + 1) * (index6 + 1);
 }
@@ -105,25 +85,22 @@ fn compare(left: &mut VecDeque<Packet>, right: &mut VecDeque<Packet>) -> (bool, 
                 let right_packet = right.pop_front().unwrap();
 
                 match (left_packet.clone(), right_packet.clone()) {
-                    (Packet::Num(_), Packet::Num(_)) => {
-                        if !(left_packet.get_number() == right_packet.get_number()) {
-                            valid = left_packet.get_number() < right_packet.get_number();
+                    (Packet::Num(left_number), Packet::Num(right_number)) => {
+                        if !(left_number == right_number) {
+                            valid = left_number < right_number;
                             result_found = true;
                         }
                     }
-                    (Packet::Packets(_), Packet::Packets(_)) => {
+                    (Packet::Packets(mut left_packets), Packet::Packets(mut right_packets)) => {
+                        (valid, result_found) = compare(&mut left_packets, &mut right_packets);
+                    }
+                    (Packet::Num(_), Packet::Packets(mut right_packets)) => {
                         (valid, result_found) =
-                            compare(&mut left_packet.get_array(), &mut right_packet.get_array());
+                            compare(&mut VecDeque::from_iter([left_packet]), &mut right_packets);
                     }
-                    (Packet::Num(_), Packet::Packets(_)) => {
-                        let mut vec: VecDeque<Packet> = VecDeque::new();
-                        vec.push_back(left_packet.clone());
-                        (valid, result_found) = compare(&mut vec, &mut right_packet.get_array());
-                    }
-                    (Packet::Packets(_), Packet::Num(_)) => {
-                        let mut vec: VecDeque<Packet> = VecDeque::new();
-                        vec.push_back(right_packet.clone());
-                        (valid, result_found) = compare(&mut left_packet.get_array(), &mut vec);
+                    (Packet::Packets(mut left_packets), Packet::Num(_)) => {
+                        (valid, result_found) =
+                            compare(&mut left_packets, &mut VecDeque::from_iter([right_packet]));
                     }
                 }
             }
@@ -158,8 +135,7 @@ fn parse(input: &mut VecDeque<char>) -> VecDeque<Packet> {
                     digit_char.push(char);
                 }
             }
-        } else {
-        };
+        }
     }
     vec_char
 }
