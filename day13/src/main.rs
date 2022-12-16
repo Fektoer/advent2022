@@ -70,7 +70,6 @@ fn compare(left: &mut VecDeque<Packet>, right: &mut VecDeque<Packet>) -> (bool, 
     let mut valid: bool = true;
 
     while !result_found {
-        // If Left is empty: return Valid = true if Right is not empty. Else just exit the loop without changing anything
         if left.len() == 0 {
             if right.len() == 0 {
                 return (valid, result_found);
@@ -79,16 +78,13 @@ fn compare(left: &mut VecDeque<Packet>, right: &mut VecDeque<Packet>) -> (bool, 
             }
         } else {
             if let Some(left_packet) = left.pop_front() {
-                // Left available but not Right: valid = false.
                 if right.len() == 0 {
                     valid = false;
                     return (valid, true);
                 }
 
-                // Both available
                 let right_packet = right.pop_front().unwrap();
                 match (left_packet.clone(), right_packet.clone()) {
-                    // Both Numbers: If values are the same, don't change anything, else Valid = Left < Right
                     (Packet::Num(left_number), Packet::Num(right_number)) => {
                         if !(left_number == right_number) {
                             valid = left_number < right_number;
@@ -96,18 +92,15 @@ fn compare(left: &mut VecDeque<Packet>, right: &mut VecDeque<Packet>) -> (bool, 
                         }
                     }
 
-                    // Both Arrays of Numbers: Recursive call
                     (Packet::Packets(mut left_packets), Packet::Packets(mut right_packets)) => {
                         (valid, result_found) = compare(&mut left_packets, &mut right_packets);
                     }
 
-                    // Left Number, Right Array: Stick left in array and recursive call
                     (Packet::Num(_), Packet::Packets(mut right_packets)) => {
                         (valid, result_found) =
                             compare(&mut VecDeque::from_iter([left_packet]), &mut right_packets);
                     }
 
-                    // Left Array, Right Number: Stick right in array and recursive call
                     (Packet::Packets(mut left_packets), Packet::Num(_)) => {
                         (valid, result_found) =
                             compare(&mut left_packets, &mut VecDeque::from_iter([right_packet]));
